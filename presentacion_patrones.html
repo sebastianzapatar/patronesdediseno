@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patrones de Diseño - Universidad EIA</title>
+    <!-- Core Reveal.js CSS para el funcionamiento de la presentación -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <!-- Tema simple base que nosotros sobreescribiremos con la paleta de la universidad -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/simple.min.css" id="theme">
+    
+    <!-- Fuentes de Google para modernizar el estilo -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* PALETA DE COLORES UNIVERSIDAD EIA */
+        :root {
+            --eia-red: #A81F2E;      /* Rojo EIA / Carmesí */
+            --eia-blue: #002D62;     /* Azul Oscuro EIA */
+            --eia-gray: #E5E5E5;     /* Gris Claro */
+            --eia-dark: #333333;     /* Texto Oscuro */
+        }
+
+        /* Estilo base del presentador */
+        .reveal {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #FAFAFA;
+        }
+
+        /* Tipografía y encabezados personalizados para hacer "match" con el estilo universitario premium */
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--eia-blue);
+            font-weight: 800;
+            text-transform: none;
+        }
+        
+        .reveal h1 { 
+            color: var(--eia-red); 
+            font-size: 2.8em; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .reveal h2 { 
+            border-bottom: 4px solid var(--eia-red); 
+            display: inline-block; 
+            padding-bottom: 10px; 
+            margin-bottom: 30px; 
+        }
+
+        /* Elementos nativos de la interfaz Reveal.js coloreados a la paleta */
+        .reveal .controls { color: var(--eia-red); }
+        .reveal .progress { color: var(--eia-red); }
+
+        /* Estructura "Card" para alojar el contenido de los patrones */
+        .pattern-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-top: 20px;
+            border-left: 10px solid var(--eia-red);
+            text-align: left;
+        }
+
+        .pattern-text {
+            flex: 1;
+        }
+        
+        .pattern-text p {
+            font-size: 0.85em;
+            line-height: 1.6;
+            color: var(--eia-dark);
+        }
+
+        .pattern-text h3 {
+            margin-top: 0;
+            color: var(--eia-blue);
+            display: flex;
+            align-items: center;
+        }
+
+        /* Estilos aplicables a las ilustraciones de refactoring.guru */
+        .pattern-img {
+            flex: 0 0 35%;
+            text-align: center;
+        }
+
+        .pattern-img img {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        /* Microinteracción de hover (ampliar imagen) */
+        .pattern-img img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Etiquetas visuales (Badges) para las clasificaciones de los patrones */
+        .badge {
+            background-color: var(--eia-blue);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 25px;
+            font-size: 0.45em;
+            font-weight: 600;
+            vertical-align: middle;
+            margin-left: 20px;
+            letter-spacing: 1px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        /* Colores según clasificación */
+        .badge.creacional { background-color: #2E86AB; }
+        .badge.estructural { background-color: #F18F01; }
+        .badge.comportamiento { background-color: #5C946E; }
+
+        /* Marca de agua / Pie de página permanente */
+        .footer-logo {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.6em;
+            font-weight: 800;
+            color: var(--eia-blue);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Círculo decorativo en el pie de página simulando el logo EIA */
+        .footer-logo::before {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: var(--eia-red);
+            border-radius: 50%;
+        }
+
+        /* Aviso de créditos para las imágenes tomadas de Refactoring Guru */
+        .credit {
+            font-size: 0.4em;
+            color: #888;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        /* Lista viñeteada interna de la tarjeta */
+        .feature-list {
+            font-size: 0.8em;
+            color: #555;
+            margin-top: 15px;
+        }
+        .feature-list li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="reveal">
+        <!-- Logo presente en todas las diapositivas por diseño estático superpuesto -->
+        <div class="footer-logo">UNIVERSIDAD EIA - INGENIERÍA DE SOFTWARE</div>
+        
+        <div class="slides">
+            
+            <!-- DIAPOSITIVA 1: PORTADA -->
+            <section>
+                <h1>Patrones de Diseño</h1>
+                <h3>Catálogo Fundamental en Ingeniería</h3>
+                <p style="margin-top: 50px; color: var(--eia-dark); font-weight: 600;">Conceptos, arquitectura y aplicaciones en Java</p>
+                <p style="font-size: 0.6em; color: #666;">Ilustraciones y conceptos por <i>Refactoring.guru</i></p>
+            </section>
+
+            <!-- DIAPOSITIVA 2: ¿QUÉ SON? -->
+            <section>
+                <h2>¿Qué son los Patrones?</h2>
+                <div class="pattern-card" style="border-left-color: var(--eia-blue);">
+                    <div class="pattern-text">
+                        <p>Son <strong>soluciones habituales a problemas comunes</strong> en el diseño de software orientado a objetos. Cada patrón es como un plano o receta que se puede personalizar para resolver un problema particular en tu código.</p>
+                        <p><strong>No son código copiable:</strong> Son conceptos arquitectónicos estructurados. No puedes simplemente "copiar y pegar" un patrón, debes adaptar y analizar el concepto base para tu lenguaje y necesidad concreta.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIAPOSITIVA 3: CATEGORÍAS PRINCIPALES -->
+            <section>
+                <h2>Clasificación</h2>
+                <!-- Uso de Flexbox para mostrar las tres cajas de manera uniforme -->
+                <div style="display: flex; justify-content: space-between; gap: 20px; margin-top: 40px;">
+                    <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-top: 5px solid #2E86AB; flex: 1;">
+                        <h4 style="color: #2E86AB;">Creacionales</h4>
+                        <p style="font-size: 0.65em;">Proporcionan mecanismos de creación de objetos seguros que incrementan la flexibilidad y la reutilización del código en el sistema.</p>
+                    </div>
+                    <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-top: 5px solid #F18F01; flex: 1;">
+                        <h4 style="color: #F18F01;">Estructurales</h4>
+                        <p style="font-size: 0.65em;">Explican y estandarizan cómo ensamblar objetos y clases en estructuras más grandes sin sacrificar la eficiencia ni la fluidez del código.</p>
+                    </div>
+                    <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-top: 5px solid #5C946E; flex: 1;">
+                        <h4 style="color: #5C946E;">Comportamiento</h4>
+                        <p style="font-size: 0.65em;">Se encargan específicamente de la comunicación efectiva, el control de flujo y la asignación de responsabilidades entre objetos.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIAPOSITIVA 4: SINGLETON -->
+            <section>
+                <h2>Singleton <span class="badge creacional">CREACIONAL</span></h2>
+                <div class="pattern-card">
+                    <div class="pattern-text">
+                        <p>Garantiza que una clase tenga <strong>una única instancia</strong> en todo el ciclo de vida del programa, a la vez que proporciona un <strong>punto de acceso global</strong> a dicha instancia.</p>
+                        <ul class="feature-list">
+                            <li>Oculta el constructor haciéndolo <code>private</code>.</li>
+                            <li>Proporciona un método estático como <code>getInstancia()</code>.</li>
+                            <li><strong>Aplicación Real:</strong> Conexiones a Bases de Datos, Sistemas de Logging, Gestores de Configuración Centralizados.</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-img">
+                        <img src="https://refactoring.guru/images/patterns/cards/singleton-mini.png" alt="Singleton">
+                        <div class="credit">Ilustración extraída de refactoring.guru</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIAPOSITIVA 5: FACTORY METHOD -->
+            <section>
+                <h2>Factory Method <span class="badge creacional">CREACIONAL</span></h2>
+                <div class="pattern-card">
+                    <div class="pattern-text">
+                        <p>Proporciona una interfaz para crear objetos en una superclase abstracta, mientras <strong>permite a las subclases alterar el tipo</strong> de objetos concretos que se crearán.</p>
+                        <ul class="feature-list">
+                            <li>Delega la responsabilidad de instanciar a clases derivadas.</li>
+                            <li>Desacopla el código cliente de las clases de inicialización pura.</li>
+                            <li><strong>Aplicación Real:</strong> Sistemas de Logística (Camión vs Barco), Gestores de Notificaciones (Email, SMS, Push).</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-img">
+                        <img src="https://refactoring.guru/images/patterns/cards/factory-method-mini.png" alt="Factory Method">
+                        <div class="credit">Ilustración extraída de refactoring.guru</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIAPOSITIVA 6: BUILDER -->
+            <section>
+                <h2>Builder <span class="badge creacional">CREACIONAL</span></h2>
+                <div class="pattern-card">
+                    <div class="pattern-text">
+                        <p>Permite construir objetos complejos <strong>paso a paso</strong>. Nos permite producir distintos tipos y representaciones de un objeto empleando el mismo código de construcción base.</p>
+                        <ul class="feature-list">
+                            <li>Evita la aberración de constructores gigantes (<i>Telescoping Constructor Anti-pattern</i>).</li>
+                            <li>Permite tener un "Director" que orquesta el orden de los pasos.</li>
+                            <li><strong>Aplicación Real:</strong> Creación de Reportes Dinámicos, Construcción de Consultas de Base de Datos.</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-img">
+                        <img src="https://refactoring.guru/images/patterns/cards/builder-mini.png" alt="Builder">
+                        <div class="credit">Ilustración extraída de refactoring.guru</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIAPOSITIVA 7: ADAPTER -->
+            <section>
+                <h2>Adapter <span class="badge estructural">ESTRUCTURAL</span></h2>
+                <div class="pattern-card">
+                    <div class="pattern-text">
+                        <p>Permite la <strong>colaboración fluida entre objetos con interfaces totalmente incompatibles</strong>. Actúa como un traductor entre dos mundos de código que no se entienden de forma nativa.</p>
+                        <ul class="feature-list">
+                            <li>Envuelve ("wraps") a un objeto antiguo o tercero para esconder su complejidad.</li>
+                            <li>Convierte formatos de datos automáticamente (Ej. Dólares a Centavos).</li>
+                            <li><strong>Aplicación Real:</strong> Integración de APIs de terceros obsoletas, Pasarelas de Pago heredadas (Legacy).</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-img">
+                        <img src="https://refactoring.guru/images/patterns/cards/adapter-mini.png" alt="Adapter">
+                        <div class="credit">Ilustración extraída de refactoring.guru</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIAPOSITIVA 8: DECORATOR -->
+            <section>
+                <h2>Decorator <span class="badge estructural">ESTRUCTURAL</span></h2>
+                <div class="pattern-card">
+                    <div class="pattern-text">
+                        <p>Permite <strong>añadir funcionalidades extra a objetos al vuelo (en tiempo de ejecución)</strong> colocando estos objetos dentro de clases encapsuladoras especiales.</p>
+                        <ul class="feature-list">
+                            <li>Es una alternativa mucho más flexible y modular a la herencia pura.</li>
+                            <li>Puedes apilar (stack) múltiples decoradores en capas estilo "Matryoshka".</li>
+                            <li><strong>Aplicación Real:</strong> Compresión o Encriptación dinámica al guardar archivos o enviar datos por la red.</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-img">
+                        <img src="https://refactoring.guru/images/patterns/cards/decorator-mini.png" alt="Decorator">
+                        <div class="credit">Ilustración extraída de refactoring.guru</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIAPOSITIVA 9: OBSERVER -->
+            <section>
+                <h2>Observer <span class="badge comportamiento">COMPORTAMIENTO</span></h2>
+                <div class="pattern-card">
+                    <div class="pattern-text">
+                        <p>Define un poderoso mecanismo de suscripción (Publicador-Suscriptor) para <strong>notificar masivamente a varios objetos sobre cualquier evento</strong> que le suceda al objeto observado.</p>
+                        <ul class="feature-list">
+                            <li>El publicador reacciona al instante pero ignora el contexto de quién lo observa.</li>
+                            <li>Los observadores pueden entrar o salir de la lista de difusión en tiempo real.</li>
+                            <li><strong>Aplicación Real:</strong> Mercados Bursátiles y de Cripto, Eventos de Botones en UI.</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-img">
+                        <img src="https://refactoring.guru/images/patterns/cards/observer-mini.png" alt="Observer">
+                        <div class="credit">Ilustración extraída de refactoring.guru</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIAPOSITIVA 10: STRATEGY -->
+            <section>
+                <h2>Strategy <span class="badge comportamiento">COMPORTAMIENTO</span></h2>
+                <div class="pattern-card">
+                    <div class="pattern-text">
+                        <p>Permite definir una familia de algoritmos relacionados, <strong>encapsular cada uno de ellos y hacerlos estrictamente intercambiables</strong>. Extrae el "cómo" se hace.</p>
+                        <ul class="feature-list">
+                            <li>Elimina enormes condicionales repetitivos (Anti-patrones de <code>if/else</code> encadenados).</li>
+                            <li>Aísla la lógica matemática variable de las reglas inmutables de negocio.</li>
+                            <li><strong>Aplicación Real:</strong> Rutas GPS dinámicas (A pie, en auto), Cálculo algorítmico de envíos logísticos.</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-img">
+                        <img src="https://refactoring.guru/images/patterns/cards/strategy-mini.png" alt="Strategy">
+                        <div class="credit">Ilustración extraída de refactoring.guru</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIAPOSITIVA 11: CONCLUSIÓN -->
+            <section>
+                <h2>El Valor de los Patrones</h2>
+                <div class="pattern-card" style="border-left-color: var(--eia-blue); display: block; text-align: center; padding: 50px;">
+                    <h3 style="justify-content: center; margin-bottom: 30px;">Vocabulario Compartido</h3>
+                    <p style="font-size: 1em;">Conocer los patrones mejora radicalmente la comunicación de ingeniería en tu equipo de desarrollo. Decir <i>"Aplica un Abstract Factory"</i> es mil veces más eficiente que explicar toda la lógica manual de control e instanciación de clases relacionales.</p>
+                    <p style="font-size: 1.2em; margin-top: 30px; font-weight: bold; color: var(--eia-red);">
+                        ¡No reinventes la rueda, mejórala!
+                    </p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Librerías de ejecución de Reveal.js importadas vía CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        // Inicialización de la presentación interactiva con los parámetros requeridos
+        Reveal.initialize({
+            controls: true,        // Muestra las flechas interactivas en la esquina
+            progress: true,        // Muestra la barra de progreso inferior de carga
+            center: true,          // Centra el contenido dinámicamente según el tamaño de la ventana
+            hash: true,            // Guarda la diapositiva en la URL para permitir recargas y favoritos
+            transition: 'slide',   // Efecto limpio de transición tipo 'slide' (diapositivas deslizantes)
+            keyboard: true,        // Habilita obligatoriamente la navegación universal con flechas del teclado
+            touch: true            // Permite deslizar (swipe) de manera natural en dispositivos táctiles/móviles
+        });
+    </script>
+</body>
+</html>
