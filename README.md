@@ -20,7 +20,7 @@ Las reglas fundamentales para construir software escalable, modular y mantenible
 
 ### 2. Patrones de Diseño (`src/patrones/`)
 Soluciones arquitectónicas probadas a problemas comunes, divididas en sus categorías formales:
-- **🛠️ Creacionales:** `Singleton`, `Factory Method`, `Builder`
+- **🛠️ Creacionales:** `Singleton`, `Factory Method`, `Builder`, `Prototype`
 - **🏗️ Estructurales:** `Adapter`, `Decorator`
 - **🧠 Comportamiento:** `Observer`, `Strategy`
 - **⚡ Resiliencia (Infraestructura):** `Circuit Breaker`
