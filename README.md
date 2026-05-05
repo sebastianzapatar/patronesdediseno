@@ -1,7 +1,7 @@
 # 📘 Catálogo de Patrones de Diseño y Principios SOLID en Java
 
 <div align="center">
-  <img src="./miku.jpg" alt="Miku" width="300"/>
+  <img src="./image.png" alt="Miku" width="300"/>
 </div>
 
 Bienvenido al repositorio educativo de **Patrones de Diseño** y **Principios SOLID**, desarrollado para la asignatura de Ingeniería de Software de la Universidad EIA.
