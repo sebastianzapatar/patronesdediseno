@@ -40,4 +40,4 @@ Este repositorio incluye una presentación académica lista para exponer:
 * Incluye ejemplos de código con coloreado de sintaxis, diagramas y explicaciones dinámicas.
 
 ---
-*Universidad EIA - Ingeniería de Software*
+*Universidad EIA - Lenguajes y Compiladores
