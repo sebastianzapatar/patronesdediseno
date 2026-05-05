@@ -12,6 +12,8 @@
     
     <!-- Fuentes de Google para modernizar el estilo -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Tema Highlight.js para colorear el código Java -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/monokai.min.css">
 
     <style>
         /* PALETA DE COLORES UNIVERSIDAD EIA */
@@ -185,7 +187,133 @@
                 <p style="font-size: 0.6em; color: #666;">Ilustraciones y conceptos por <i>Refactoring.guru</i></p>
             </section>
 
-            <!-- DIAPOSITIVA 2: ¿QUÉ SON? -->
+            <!-- DIAPOSITIVA 2: PRINCIPIOS SOLID (INTRO) -->
+            <section>
+                <h2>Principios SOLID</h2>
+                <div class="pattern-card" style="border-left-color: var(--eia-blue); display: block; padding: 25px;">
+                    <p style="font-size: 0.85em; text-align: center; margin-bottom: 20px;">Son la base del diseño de software limpio y escalable. Todo patrón de diseño existe gracias a ellos:</p>
+                    <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
+                        <div style="background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 5px solid #2E86AB;">
+                            <strong style="color: #2E86AB; font-size: 0.8em;">S - Single Responsibility (Responsabilidad Única)</strong>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 5px solid #5C946E;">
+                            <strong style="color: #5C946E; font-size: 0.8em;">O - Open/Closed (Abierto/Cerrado)</strong>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 5px solid #82B366;">
+                            <strong style="color: #82B366; font-size: 0.8em;">L - Liskov Substitution (Sustitución de Liskov)</strong>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 5px solid #D6B656;">
+                            <strong style="color: #D6B656; font-size: 0.8em;">I - Interface Segregation (Segregación de Interfaces)</strong>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 5px solid #F18F01;">
+                            <strong style="color: #F18F01; font-size: 0.8em;">D - Dependency Inversion (Inversión de Dependencias)</strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SOLID: S -->
+            <section>
+                <h2>S - Single Responsibility</h2>
+                <p style="font-size: 0.7em;">Una clase debe tener una, y solo una, razón para cambiar.</p>
+                <pre><code class="language-java" data-trim data-line-numbers>
+// MAL: Mezcla lógica de negocio con base de datos
+class Empleado {
+    public void calcularSueldo() { /* ... */ }
+    public void guardarEnBaseDeDatos() { /* ... */ }
+}
+
+// BIEN: Separación estricta de responsabilidades
+class Empleado {
+    public void calcularSueldo() { /* ... */ }
+}
+class EmpleadoRepository {
+    public void guardarEnBaseDeDatos(Empleado e) { /* ... */ }
+}
+                </code></pre>
+            </section>
+
+            <!-- SOLID: O -->
+            <section>
+                <h2>O - Open/Closed</h2>
+                <p style="font-size: 0.7em;">Abierto para extender funcionalidad, cerrado para modificar código.</p>
+                <pre><code class="language-java" data-trim data-line-numbers>
+// Interfaz base (Cerrada a modificación)
+interface Descuento {
+    double aplicar(double precio);
+}
+
+// Nuevas extensiones (Abiertas) sin tocar el código existente
+class DescuentoVIP implements Descuento {
+    public double aplicar(double precio) { return precio * 0.8; }
+}
+class DescuentoEstudiante implements Descuento {
+    public double aplicar(double precio) { return precio * 0.5; }
+}
+                </code></pre>
+            </section>
+
+            <!-- SOLID: L -->
+            <section>
+                <h2>L - Liskov Substitution</h2>
+                <p style="font-size: 0.7em;">Toda clase derivada debe sustituir a su base sin romper el sistema.</p>
+                <pre><code class="language-java" data-trim data-line-numbers>
+abstract class Ave { 
+    abstract void comer(); 
+}
+abstract class AveVoladora extends Ave { 
+    abstract void volar(); 
+}
+
+class Loro extends AveVoladora { /* Sabe volar y comer */ }
+
+class Pinguino extends Ave { 
+    // Solo sabe comer. Nunca se le pedirá volar,
+    // evitando excepciones en tiempo de ejecución.
+}
+                </code></pre>
+            </section>
+
+            <!-- SOLID: I -->
+            <section>
+                <h2>I - Interface Segregation</h2>
+                <p style="font-size: 0.7em;">Múltiples interfaces pequeñas son mejores que una sola gigante.</p>
+                <pre><code class="language-java" data-trim data-line-numbers>
+// BIEN: Interfaces segregadas
+interface Impresora { void imprimir(); }
+interface Escaner { void escanear(); }
+
+class MaquinaModerna implements Impresora, Escaner { /* ... */ }
+
+// Una impresora vieja NO está forzada a implementar 'escanear()'
+class ImpresoraBasica implements Impresora { 
+    public void imprimir() { /* ... */ } 
+}
+                </code></pre>
+            </section>
+
+            <!-- SOLID: D -->
+            <section>
+                <h2>D - Dependency Inversion</h2>
+                <p style="font-size: 0.7em;">Depende de abstracciones (interfaces), no de concreciones.</p>
+                <pre><code class="language-java" data-trim data-line-numbers>
+interface BaseDatos { void guardar(String datos); }
+
+class MySQL implements BaseDatos { /* ... */ }
+class Mongo implements BaseDatos { /* ... */ }
+
+// El negocio IGNORA si es MySQL o Mongo, depende de la abstracción
+class RegistroNegocio {
+    private BaseDatos db;
+    
+    public RegistroNegocio(BaseDatos db) {
+        this.db = db; // Inyección de dependencia
+    }
+}
+                </code></pre>
+            </section>
+
+            <!-- ¿QUÉ SON LOS PATRONES? -->
             <section>
                 <h2>¿Qué son los Patrones?</h2>
                 <div class="pattern-card" style="border-left-color: var(--eia-blue);">
@@ -196,63 +324,45 @@
                 </div>
             </section>
 
-            <!-- DIAPOSITIVA 3: RESUMEN DE CLASIFICACIÓN -->
+            <!-- RESUMEN DE CLASIFICACIÓN -->
             <section>
                 <h2>Clasificación de Patrones</h2>
-                <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 30px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px;">
                     <div style="display: flex; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden;">
                         <div style="background: #2E86AB; width: 10px;"></div>
-                        <div style="padding: 20px; text-align: left; flex: 1;">
-                            <h4 style="color: #2E86AB; margin: 0 0 10px 0;">Creacionales</h4>
-                            <p style="font-size: 0.7em; margin: 0;">Se enfocan en <strong>cómo se construyen los objetos</strong>. Proveen mecanismos de instanciación seguros, ocultando la lógica compleja para mayor flexibilidad.</p>
+                        <div style="padding: 15px; text-align: left; flex: 1;">
+                            <h4 style="color: #2E86AB; margin: 0 0 5px 0; font-size: 0.9em;">Creacionales</h4>
+                            <p style="font-size: 0.6em; margin: 0;"><strong>Cómo se construyen</strong> los objetos. Mecanismos seguros de instanciación.</p>
                         </div>
                     </div>
                     <div style="display: flex; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden;">
                         <div style="background: #F18F01; width: 10px;"></div>
-                        <div style="padding: 20px; text-align: left; flex: 1;">
-                            <h4 style="color: #F18F01; margin: 0 0 10px 0;">Estructurales</h4>
-                            <p style="font-size: 0.7em; margin: 0;">Se enfocan en <strong>cómo están estructuradas las clases y objetos</strong>. Ayudan a ensamblar partes pequeñas en arquitecturas mucho más grandes y eficientes.</p>
+                        <div style="padding: 15px; text-align: left; flex: 1;">
+                            <h4 style="color: #F18F01; margin: 0 0 5px 0; font-size: 0.9em;">Estructurales</h4>
+                            <p style="font-size: 0.6em; margin: 0;"><strong>Cómo se estructuran</strong> las clases, ensamblando arquitecturas mayores.</p>
                         </div>
                     </div>
                     <div style="display: flex; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden;">
                         <div style="background: #5C946E; width: 10px;"></div>
-                        <div style="padding: 20px; text-align: left; flex: 1;">
-                            <h4 style="color: #5C946E; margin: 0 0 10px 0;">Comportamiento</h4>
-                            <p style="font-size: 0.7em; margin: 0;">Se enfocan en <strong>cómo los objetos interactúan entre sí</strong>. Asignan responsabilidades, controlan el flujo de datos y la comunicación algorítmica.</p>
+                        <div style="padding: 15px; text-align: left; flex: 1;">
+                            <h4 style="color: #5C946E; margin: 0 0 5px 0; font-size: 0.9em;">Comportamiento</h4>
+                            <p style="font-size: 0.6em; margin: 0;"><strong>Cómo interactúan</strong> entre sí, controlando flujo y responsabilidades.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden;">
+                        <div style="background: #8E44AD; width: 10px;"></div>
+                        <div style="padding: 15px; text-align: left; flex: 1;">
+                            <h4 style="color: #8E44AD; margin: 0 0 5px 0; font-size: 0.9em;">Resiliencia</h4>
+                            <p style="font-size: 0.6em; margin: 0;"><strong>Cómo toleran fallos</strong>. Previenen caídas en cascada (Microservicios).</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- DIAPOSITIVA 4: PRINCIPIOS SOLID -->
+            <!-- SEPARADOR CREACIONALES -->
             <section>
-                <h2>Principios SOLID</h2>
-                <div class="pattern-card" style="border-left-color: var(--eia-blue); display: block; padding: 25px;">
-                    <p style="font-size: 0.85em; text-align: center; margin-bottom: 20px;">Son la base del diseño de software limpio y escalable. Los patrones de diseño existen gracias a ellos:</p>
-                    
-                    <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
-                        <div style="background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 5px solid #2E86AB;">
-                            <strong style="color: #2E86AB; font-size: 0.8em;">S - Single Responsibility (Responsabilidad Única)</strong>
-                            <p style="font-size: 0.65em; margin: 5px 0 0 0; color: #555;">Una clase debe tener una, y solo una, razón para cambiar.</p>
-                        </div>
-                        <div style="background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 5px solid #5C946E;">
-                            <strong style="color: #5C946E; font-size: 0.8em;">O - Open/Closed (Abierto/Cerrado)</strong>
-                            <p style="font-size: 0.65em; margin: 5px 0 0 0; color: #555;">Abierto para extender funcionalidad, cerrado para modificar su código fuente.</p>
-                        </div>
-                        <div style="background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 5px solid #82B366;">
-                            <strong style="color: #82B366; font-size: 0.8em;">L - Liskov Substitution (Sustitución de Liskov)</strong>
-                            <p style="font-size: 0.65em; margin: 5px 0 0 0; color: #555;">Toda clase derivada debe poder sustituir a su base sin romper el sistema.</p>
-                        </div>
-                        <div style="background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 5px solid #D6B656;">
-                            <strong style="color: #D6B656; font-size: 0.8em;">I - Interface Segregation (Segregación de Interfaces)</strong>
-                            <p style="font-size: 0.65em; margin: 5px 0 0 0; color: #555;">Es mejor tener múltiples interfaces pequeñas que una sola gigante y genérica.</p>
-                        </div>
-                        <div style="background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 5px solid #F18F01;">
-                            <strong style="color: #F18F01; font-size: 0.8em;">D - Dependency Inversion (Inversión de Dependencias)</strong>
-                            <p style="font-size: 0.65em; margin: 5px 0 0 0; color: #555;">Depende de abstracciones (interfaces), no dependas de implementaciones concretas.</p>
-                        </div>
-                    </div>
-                </div>
+                <h1 style="color: #2E86AB; font-size: 2.2em;">Patrones Creacionales</h1>
+                <p>Mecanismos seguros y flexibles para la creación de objetos</p>
             </section>
 
             <!-- DIAPOSITIVA 4: SINGLETON -->
@@ -312,6 +422,12 @@
                 </div>
             </section>
 
+            <!-- SEPARADOR ESTRUCTURALES -->
+            <section>
+                <h1 style="color: #F18F01; font-size: 2.2em;">Patrones Estructurales</h1>
+                <p>Ensamblaje de clases y objetos en arquitecturas mayores sin perder eficiencia</p>
+            </section>
+
             <!-- DIAPOSITIVA 7: ADAPTER -->
             <section>
                 <h2>Adapter <span class="badge estructural">ESTRUCTURAL</span></h2>
@@ -348,6 +464,12 @@
                         <div class="credit">Ilustración extraída de refactoring.guru</div>
                     </div>
                 </div>
+            </section>
+
+            <!-- SEPARADOR COMPORTAMIENTO -->
+            <section>
+                <h1 style="color: #5C946E; font-size: 2.2em;">Patrones de Comportamiento</h1>
+                <p>Comunicación e interacción algorítmica y asignación de responsabilidades</p>
             </section>
 
             <!-- DIAPOSITIVA 9: OBSERVER -->
@@ -388,7 +510,31 @@
                 </div>
             </section>
 
-            <!-- DIAPOSITIVA 11: CONCLUSIÓN -->
+            <!-- SEPARADOR RESILIENCIA -->
+            <section>
+                <h1 style="color: #8E44AD; font-size: 2.2em;">Patrones de Resiliencia</h1>
+                <p>Mecanismos modernos para tolerar fallos en entornos distribuidos</p>
+            </section>
+
+            <!-- DIAPOSITIVA 11: CIRCUIT BREAKER -->
+            <section>
+                <h2>Circuit Breaker <span class="badge" style="background-color: #8E44AD;">RESILIENCIA</span></h2>
+                <div class="pattern-card">
+                    <div class="pattern-text">
+                        <p>Previene que una aplicación intente ejecutar constantemente una operación remota que <strong>probablemente va a fallar</strong>.</p>
+                        <ul class="feature-list">
+                            <li>Simula un interruptor eléctrico con estados: Cerrado, Abierto, Semi-Abierto.</li>
+                            <li>Evita la sobrecarga de un servicio caído y los fallos en cascada.</li>
+                            <li><strong>Aplicación Real:</strong> Consumo de APIs inestables, arquitecturas de microservicios.</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-img" style="font-size: 5em; color: #8E44AD; padding-bottom: 20px;">
+                        ⚡
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIAPOSITIVA 12: CONCLUSIÓN -->
             <section>
                 <h2>El Valor de los Patrones</h2>
                 <div class="pattern-card" style="border-left-color: var(--eia-blue); display: block; text-align: center; padding: 50px;">
@@ -405,16 +551,17 @@
 
     <!-- Librerías de ejecución de Reveal.js importadas vía CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
     <script>
-        // Inicialización de la presentación interactiva con los parámetros requeridos
         Reveal.initialize({
-            controls: true,        // Muestra las flechas interactivas en la esquina
-            progress: true,        // Muestra la barra de progreso inferior de carga
-            center: true,          // Centra el contenido dinámicamente según el tamaño de la ventana
-            hash: true,            // Guarda la diapositiva en la URL para permitir recargas y favoritos
-            transition: 'slide',   // Efecto limpio de transición tipo 'slide' (diapositivas deslizantes)
-            keyboard: true,        // Habilita obligatoriamente la navegación universal con flechas del teclado
-            touch: true            // Permite deslizar (swipe) de manera natural en dispositivos táctiles/móviles
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide',
+            keyboard: true,
+            touch: true,
+            plugins: [ RevealHighlight ]
         });
     </script>
 </body>

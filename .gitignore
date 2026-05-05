@@ -1,0 +1,16 @@
+# Ignorar archivos generados por el sistema (MacOS)
+.DS_Store
+
+# Ignorar scripts auxiliares de Python usados para automatizar HTML
+modify_slides.py
+
+# Ignorar archivos compilados de Java
+*.class
+bin/
+out/
+target/
+
+# Ignorar carpetas de entornos de desarrollo (IDEs)
+.idea/
+.vscode/
+*.iml
